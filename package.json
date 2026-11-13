@@ -1,7 +1,7 @@
 {
   "name": "queenbee-kit-etudiants-jour1",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mesures relevées avec `tp/tp1-lecture/sonde.js` (Node.js 25, second passage, serveur déjà « chaud »).",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,5 +12,13 @@
   "type": "module",
   "dependencies": {
     "express": "^5.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ITISDEVELOPMENT/TP-NODE.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ITISDEVELOPMENT/TP-NODE/issues"
+  },
+  "homepage": "https://github.com/ITISDEVELOPMENT/TP-NODE#readme"
 }
