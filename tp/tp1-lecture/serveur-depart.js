@@ -28,7 +28,7 @@ app.get("/ping", (req, res) => {
   res.json({ pong: true });
 });
 
-// Résultat commun aux deux imports.
+// Construit la réponse
 function resultat(mesures, sommePoids, debut) {
   return {
     mesures,
@@ -37,8 +37,7 @@ function resultat(mesures, sommePoids, debut) {
   };
 }
 
-// POST /import/bloquant : tout le fichier d'un coup. Tant que readFileSync,
-// split et la boucle de JSON.parse tournent, la boucle d'événements est bloquée.
+// Lit tout le fichier d'un coup
 app.post("/import/bloquant", (req, res) => {
   const debut = performance.now();
   const lignes = readFileSync(FICHIER, "utf8").split("\n");
@@ -52,8 +51,7 @@ app.post("/import/bloquant", (req, res) => {
   res.json(resultat(mesures, sommePoids, debut));
 });
 
-// POST /import/flux : ligne par ligne. Entre deux morceaux du fichier,
-// la boucle d'événements reprend la main et peut traiter les /ping.
+// Lit le fichier ligne par ligne
 app.post("/import/flux", async (req, res, next) => {
   try {
     const debut = performance.now();

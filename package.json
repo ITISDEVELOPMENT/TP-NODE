@@ -4,6 +4,7 @@
   "description": "Mesures relevées avec `tp/tp1-lecture/sonde.js` (Node.js 25, second passage, serveur déjà « chaud »).",
   "main": "index.js",
   "scripts": {
+    "start": "node --watch src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,7 +12,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "express": "^5.3.0"
+    "express": "^5.3.0",
+    "morgan": "^1.12.1"
   },
   "repository": {
     "type": "git",

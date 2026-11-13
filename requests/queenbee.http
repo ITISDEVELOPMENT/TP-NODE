@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:3000
+
+### Santé
+GET {{baseUrl}}/health
+
+### Toutes les ruches
+GET {{baseUrl}}/api/hives
+
+### Ruches d'un site
+GET {{baseUrl}}/api/hives?site_id=SN-CASA
+
+### Une ruche
+GET {{baseUrl}}/api/hives/SN-CASA-001
+
+### Ruche inconnue (404)
+GET {{baseUrl}}/api/hives/XX-NOPE-999
+
+### Nouvelle mesure (201)
+POST {{baseUrl}}/api/hives/SN-CASA-001/measures
+Content-Type: application/json
+
+{
+  "hive_id": "SN-CASA-001",
+  "site_id": "SN-CASA",
+  "timestamp": "2026-10-31T10:00:00Z",
+  "position_lat": 12.5743,
+  "position_lon": -16.2873,
+  "weight_kg": 36.84,
+  "temp_internal_c": 34.4,
+  "temp_external_c": 27.1,
+  "humidity_pct": 64,
+  "acoustic_activity_score": 0.42,
+  "battery_pct": 88
+}
+
+### Mesure sans timestamp (400)
+POST {{baseUrl}}/api/hives/SN-CASA-001/measures
+Content-Type: application/json
+
+{ "weight_kg": 36.84 }
+
+### Mesure sur une ruche inconnue (404)
+POST {{baseUrl}}/api/hives/XX-NOPE-999/measures
+Content-Type: application/json
+
+{ "timestamp": "2026-10-31T10:00:00Z", "weight_kg": 36.84 }
