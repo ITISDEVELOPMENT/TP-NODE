@@ -1,7 +1,17 @@
-import app from "./app.js";
+import { config } from "./config.js";
+import { createApp } from "./app.js";
+import { createMemoryHivesRepository } from "./repositories/memory/hives.repository.js";
+import { createMemoryMeasuresRepository } from "./repositories/memory/measures.repository.js";
+import { createMemoryInspectionsRepository } from "./repositories/memory/inspections.repository.js";
+import { hives, measures, inspections } from "./repositories/memory/seed.js";
 
-const PORT = process.env.PORT || 3000;
+// Stockage en mémoire (PostgreSQL au jour 2)
+const app = createApp({
+  hivesRepository: createMemoryHivesRepository(hives),
+  measuresRepository: createMemoryMeasuresRepository(measures),
+  inspectionsRepository: createMemoryInspectionsRepository(inspections),
+});
 
-app.listen(PORT, ()=>{
-    console.log(`Serveur démarré sur le port ${PORT}`)
-})
+app.listen(config.port, () => {
+  console.log(`Serveur démarré sur le port ${config.port} (${config.env})`);
+});

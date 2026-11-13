@@ -39,6 +39,18 @@ Content-Type: application/json
 
 { "weight_kg": 36.84 }
 
+### Mesure de 500 kg, hors plage (400)
+POST {{baseUrl}}/api/hives/SN-CASA-001/measures
+Content-Type: application/json
+
+{ "timestamp": "2026-10-31T10:00:00Z", "weight_kg": 500 }
+
+### Mesure avec une humidité hors plage (400)
+POST {{baseUrl}}/api/hives/SN-CASA-001/measures
+Content-Type: application/json
+
+{ "timestamp": "2026-10-31T10:00:00Z", "weight_kg": 36.84, "humidity_pct": 120 }
+
 ### Mesure sur une ruche inconnue (404)
 POST {{baseUrl}}/api/hives/XX-NOPE-999/measures
 Content-Type: application/json

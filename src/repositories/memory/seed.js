@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-// Ruches en mémoire
+// Données de départ en mémoire
 export const hives = [
   { id: "SN-CASA-001", site_id: "SN-CASA", status: "active" },
   { id: "SN-CASA-002", site_id: "SN-CASA", status: "active" },
@@ -10,7 +10,7 @@ export const hives = [
 ];
 
 // Mesures du 31/10 pour nos ruches
-const fichier = new URL("../../data/mesures-SN-CASA-2026-10-31.ndjson", import.meta.url);
+const fichier = new URL("../../../data/mesures-SN-CASA-2026-10-31.ndjson", import.meta.url);
 const ids = new Set(hives.map((h) => h.id));
 export const measures = readFileSync(fichier, "utf8")
   .split("\n")
@@ -18,7 +18,6 @@ export const measures = readFileSync(fichier, "utf8")
   .map((ligne) => JSON.parse(ligne))
   .filter((m) => ids.has(m.hive_id));
 
-// Inspections
 export const inspections = [
   {
     id: "3f1c2b7e-8a4d-4c6e-9b1a-2d5e7f8a9b01",

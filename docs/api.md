@@ -14,7 +14,7 @@ Le § 10.1 du cahier des charges prévoit les API Authentification, Ruches, Insp
 - **Ruches** : liste, détail, historique des mesures, ajout d'une mesure ;
 - **Inspections** : consultation et création.
 
-Hors périmètre de la v0 : authentification, création / modification / suppression de ruches, synchronisation différée des inspections, photos d'inspection, récoltes, alertes, analytics, contrôle des plages physiques des mesures (UC-CY02).
+Hors périmètre de la v0 : authentification, création / modification / suppression de ruches, synchronisation différée des inspections, photos d'inspection, récoltes, alertes, analytics, rejet des mesures en double (UC-CY02).
 
 ### Format des erreurs (RFC 9457)
 
@@ -171,12 +171,26 @@ Enregistre une mesure envoyée par la passerelle d'un site (format du § 6.5 du 
 
 | Champ | Type | Obligatoire |
 |---|---|---|
-| `timestamp` | date ISO 8601 : l'instant de la mesure par le capteur, conservé tel quel | oui |
+| `timestamp` | date et heure ISO 8601 avec fuseau, par exemple `2026-10-31T10:00:00Z` : l'instant de la mesure par le capteur, conservé tel quel | oui |
 | `weight_kg` | nombre | oui |
 | `hive_id` | texte : s'il est présent, il doit être égal à `:id` | non |
-| `site_id`, `position_lat`, `position_lon`, `temp_internal_c`, `temp_external_c`, `humidity_pct`, `acoustic_activity_score`, `battery_pct` | nombres (`site_id` : texte) | non |
+| `site_id` | texte, remplacé par le site de la ruche | non |
+| `position_lat`, `position_lon`, `temp_internal_c`, `temp_external_c`, `humidity_pct`, `acoustic_activity_score`, `battery_pct` | nombres | non |
 
 `hive_id` et `site_id` de la mesure enregistrée sont toujours ceux de la ruche du chemin.
+
+**Plages physiques** (UC-CY02) : chaque champ numérique présent doit être un nombre compris dans sa plage, bornes incluses.
+
+| Champ | Minimum | Maximum |
+|---|---|---|
+| `position_lat` | -90 | 90 |
+| `position_lon` | -180 | 180 |
+| `weight_kg` | 0 | 150 |
+| `temp_internal_c` | -10 | 60 |
+| `temp_external_c` | -20 | 60 |
+| `humidity_pct` | 0 | 100 |
+| `acoustic_activity_score` | 0 | 1 |
+| `battery_pct` | 0 | 100 |
 
 ```json
 {
@@ -201,14 +215,14 @@ Enregistre une mesure envoyée par la passerelle d'un site (format du § 6.5 du 
 }
 ```
 
-**400** : `timestamp` ou `weight_kg` manque, ou `hive_id` ne correspond pas à `:id`.
+**400** : `timestamp` ou `weight_kg` manque, `timestamp` n'est pas une date ISO 8601, `hive_id` ne correspond pas à `:id`, ou un champ numérique n'est pas un nombre dans sa plage physique. Rien n'est enregistré.
 
 ```json
 {
   "type": "about:blank",
   "title": "Requête invalide",
   "status": 400,
-  "detail": "Les champs timestamp et weight_kg sont obligatoires."
+  "detail": "Le champ weight_kg doit être un nombre compris entre 0 et 150."
 }
 ```
 

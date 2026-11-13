@@ -4,8 +4,8 @@
   "description": "Mesures relevées avec `tp/tp1-lecture/sonde.js` (Node.js 25, second passage, serveur déjà « chaud »).",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node --watch --env-file=.env src/server.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
