@@ -44,3 +44,91 @@ POST {{baseUrl}}/api/hives/XX-NOPE-999/measures
 Content-Type: application/json
 
 { "timestamp": "2026-10-31T10:00:00Z", "weight_kg": 36.84 }
+
+### Mesure avec un JSON mal formé (400)
+POST {{baseUrl}}/api/hives/SN-CASA-001/measures
+Content-Type: application/json
+
+{ "weight_kg":
+
+### Historique des mesures (première page)
+GET {{baseUrl}}/api/hives/SN-CASA-001/measures
+
+### Historique des mesures (page suivante)
+GET {{baseUrl}}/api/hives/SN-CASA-001/measures?limit=50&offset=50
+
+### Historique, limit trop petit (400)
+GET {{baseUrl}}/api/hives/SN-CASA-001/measures?limit=0
+
+### Historique, limit trop grand (400)
+GET {{baseUrl}}/api/hives/SN-CASA-001/measures?limit=501
+
+### Historique, limit pas un nombre (400)
+GET {{baseUrl}}/api/hives/SN-CASA-001/measures?limit=abc
+
+### Historique, offset négatif (400)
+GET {{baseUrl}}/api/hives/SN-CASA-001/measures?offset=-1
+
+### Historique d'une ruche inconnue (404)
+GET {{baseUrl}}/api/hives/XX-NOPE-999/measures
+
+### Inspections d'une ruche
+GET {{baseUrl}}/api/hives/SN-CASA-001/inspections
+
+### Inspections d'une ruche inconnue (404)
+GET {{baseUrl}}/api/hives/XX-NOPE-999/inspections
+
+### Nouvelle inspection, UUID neuf à chaque envoi (201)
+POST {{baseUrl}}/api/hives/SN-CASA-003/inspections
+Content-Type: application/json
+
+{
+  "id": "{{$guid}}",
+  "inspected_at": "2026-11-13T09:00:00Z",
+  "colony_status": "forte",
+  "queen_present": true,
+  "observations": "Bonne activité."
+}
+
+### Inspection en double (201 la première fois, 409 ensuite)
+POST {{baseUrl}}/api/hives/SN-CASA-003/inspections
+Content-Type: application/json
+
+{
+  "id": "0b6c4a0e-6f1f-4d8e-9a2b-3c4d5e6f7a8b",
+  "inspected_at": "2026-11-13T09:00:00Z",
+  "colony_status": "normale"
+}
+
+### Inspection sans UUID valide (400)
+POST {{baseUrl}}/api/hives/SN-CASA-003/inspections
+Content-Type: application/json
+
+{
+  "id": "abc",
+  "inspected_at": "2026-11-13T09:00:00Z",
+  "colony_status": "forte"
+}
+
+### Inspection avec un colony_status inconnu (400)
+POST {{baseUrl}}/api/hives/SN-CASA-003/inspections
+Content-Type: application/json
+
+{
+  "id": "{{$guid}}",
+  "inspected_at": "2026-11-13T09:00:00Z",
+  "colony_status": "super"
+}
+
+### Inspection sur une ruche inconnue (404)
+POST {{baseUrl}}/api/hives/XX-NOPE-999/inspections
+Content-Type: application/json
+
+{
+  "id": "{{$guid}}",
+  "inspected_at": "2026-11-13T09:00:00Z",
+  "colony_status": "forte"
+}
+
+### Route inconnue (404)
+GET {{baseUrl}}/api/nope

@@ -2,6 +2,7 @@ import express from "express";
 // import { requestLogger } from "./middlewares/requestLogger.js";
 import hivesRouter from "./route/hives.route.js";
 import morgan from "morgan";
+import { notFoundHandler, errorHandler } from "./middlewares/errorHandler.js";
 
 
 const app = express();
@@ -15,5 +16,8 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/hives", hivesRouter);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;
